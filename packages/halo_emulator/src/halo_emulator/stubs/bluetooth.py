@@ -48,6 +48,9 @@ class BluetoothStub:
         """Deliver bytes to the Lua receive_callback (called from Lua thread only)."""
         if self._receive_cb is not None:
             # Pass as a latin-1 string so Lua sees it as a byte string
+            # (Lua indexes bytes via string.byte/string.sub; multi-byte
+            # UTF-8 decoding would break that). Non-ASCII text must be
+            # encoded correctly by the sender (TxPlainText.pack).
             lua_str = data.decode("latin-1")
             self._receive_cb(lua_str)
 

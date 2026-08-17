@@ -1,0 +1,61 @@
+{
+  "translation_not_native": {
+    "attempted": true,
+    "status_code": 200,
+    "content": "",
+    "elapsed_s": 17.18,
+    "empty": true,
+    "error": null
+  },
+  "scenes": {
+    "taken": "artifacts\\t6-v5\\scene1_taken.png",
+    "double_dose": "artifacts\\t6-v5\\scene2_double_dose.png",
+    "reminder": "artifacts\\t6-v5\\scene3_reminder.png",
+    "asr": "artifacts\\t6-v5\\scene4_asr.png",
+    "translate": "artifacts\\t6-v5\\scene4_translate.png"
+  },
+  "vestige_ingest": {
+    "content": [
+      {
+        "text": "{\n  \"decision\": \"create\",\n  \"hasEmbedding\": false,\n  \"importanceScore\": 0.39249999999999996,\n  \"message\": \"Memory created (force_create=true)\",\n  \"nodeId\": \"8b040427-0aec-40a8-9bf6-bc5cb50f93eb\",\n  \"predictionError\": 1.0,\n  \"reason\": \"Forced creation - skipped similarity check\",\n  \"success\": true\n}",
+        "type": "text"
+      }
+    ],
+    "isError": false,
+    "structuredContent": {
+      "decision": "create",
+      "hasEmbedding": false,
+      "importanceScore": 0.39249999999999996,
+      "message": "Memory created (force_create=true)",
+      "nodeId": "8b040427-0aec-40a8-9bf6-bc5cb50f93eb",
+      "predictionError": 1.0,
+      "reason": "Forced creation - skipped similarity check",
+      "success": true
+    }
+  },
+  "audio_events": 1,
+  "translation": {
+    "asr_korean": "약 먹을 시간이야.",
+    "asr_meta": {
+      "source_language": "ko",
+      "asr_model": "faster-whisper base"
+    },
+    "shim": {
+      "attempted": true,
+      "status_code": 200,
+      "content": "",
+      "elapsed_s": 17.18,
+      "empty": true,
+      "error": null
+    }
+  },
+  "artifacts": {
+    "video": "artifacts\\t6-v5\\demo_full_loop.mp4",
+    "taken": "artifacts\\t6-v5\\scene1_taken.png",
+    "double_dose": "artifacts\\t6-v5\\scene2_double_dose.png",
+    "reminder": "artifacts\\t6-v5\\scene3_reminder.png",
+    "asr": "artifacts\\t6-v5\\scene4_asr.png",
+    "translate": "artifacts\\t6-v5\\scene4_translate.png",
+    "audio": "artifacts\\t6-v5\\korean_phrase.wav"
+  }
+}

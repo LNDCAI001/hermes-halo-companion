@@ -1,0 +1,4 @@
+data: {"id": "chatcmpl-03133b4044e44cc1af8ada68", "object": "chat.completion.chunk", "created": 1786643800, "model": "google/gemini-3.5-flash", "choices": [{"index": 0, "delta": {"role": "assistant", "content": ""}, "finish_reason": "stop"}]}
+
+data: [DONE]
+

@@ -1,0 +1,1 @@
+{"model": "google/gemini-3.5-flash", "stream": true, "messages": [{"role": "user", "content": "Translate to English, one short phrase: \uc57d \uba39\uc744 \uc2dc\uac04\uc774\uc57c. Output only the English translation."}]}

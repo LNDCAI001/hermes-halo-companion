@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
@@ -13,8 +17,11 @@ members = [
     "packages/brilliant_msg",
     "packages/brilliant_sdk",
     "packages/halo_emulator",
+    "packages/halo_voice_pipeline",
+    "packages/halo_companion",
 ]
 
 [tool.uv.sources]
 brilliant-ble = { workspace = true }
 brilliant-msg = { workspace = true }
+halo-emulator = { workspace = true }

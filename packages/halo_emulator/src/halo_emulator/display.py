@@ -1,6 +1,7 @@
 """256×256 RGBA display framebuffer with PIL-based drawing."""
 from __future__ import annotations
 
+import os
 import threading
 from typing import Sequence
 
@@ -109,7 +110,29 @@ class DisplayBuffer:
         self._brightness: int = 0  # -2..2
         self._pan_x: int = 0
         self._pan_y: int = 0
-        self._font: ImageFont.ImageFont | ImageFont.FreeTypeFont = ImageFont.load_default()
+        self._font: ImageFont.ImageFont | ImageFont.FreeTypeFont = self._default_font()
+
+    @staticmethod
+    def _default_font(size: int = 24) -> ImageFont.ImageFont | ImageFont.FreeTypeFont:
+        """Pick a font that can render the target language.
+
+        The PIL built-in default font (Aileron) is Latin-only — Korean/Hangul
+        renders as tofu boxes. Windows ships Malgun Gothic (Hangul-capable);
+        use it when present, else fall back to the built-in default.
+        """
+        for cand in (
+            r"C:\Windows\Fonts\malgun.ttf",   # Malgun Gothic (Hangul)
+            r"C:\Windows\Fonts\msyh.ttc",     # Microsoft YaHei (CJK)
+        ):
+            try:
+                if os.path.exists(cand):
+                    return ImageFont.truetype(cand, size)
+            except OSError:
+                continue
+        try:
+            return ImageFont.load_default(size=size)
+        except TypeError:
+            return ImageFont.load_default()
 
     # ------------------------------------------------------------------ palette
 
@@ -197,18 +220,22 @@ class DisplayBuffer:
     # ------------------------------------------------------------------ text / font
 
     def set_font(self, font_id: int, size: int = 16, scale: int = 1) -> None:
-        # Use PIL default font; a future version could load real fonts from fonts/
-        try:
-            self._font = ImageFont.load_default(size=int(size))
-        except TypeError:
-            # Older Pillow versions don't accept size argument
-            self._font = ImageFont.load_default()
+        # Use a CJK/Hangul-capable font when available (see _default_font).
+        self._font = self._default_font(size=int(size))
 
     def get_font_list(self) -> list[dict]:
         return [{"id": 1, "name": "default"}]
 
     def text(self, txt: str, x: int, y: int, color: int = 0xFFFFFF) -> None:
         rgb = _rgb_from_int(int(color))
+        # The bluetooth stub delivers payloads to Lua as latin-1 strings so
+        # Lua's byte-indexing keeps working. That means non-ASCII text
+        # (Korean/Hangul) arrives here as latin-1-decoded UTF-8 bytes
+        # (mojibake). Recover the real characters before rendering.
+        try:
+            txt = txt.encode("latin-1").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            pass  # already proper Unicode or pure ASCII — render as-is
         self._draw.text((int(x) - 1, int(y) - 1), str(txt), fill=rgb + (255,), font=self._font)
 
     def char(self, codepoint: int, x: int, y: int, color: int = 0xFFFFFF) -> None:

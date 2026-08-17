@@ -6,10 +6,20 @@
 
 A 26.4s full-loop demo: capture → Vestige memory write → meds double-dose alert with sound → **Korean ASR "약 먹을 시간이야" with correct Hangul rendering** → **live translation "It's time to take your medicine"** on the 256×256 display.
 
-- **Capture**: voice / IMU / button events from Halo (audio, photo, tap)
-- **Memory**: `vestige-store/` — FSRS-6 forgetting curve, surprise gating, retroactive backfill, dreams
+- **Capture**: voice / IMU / button events from Halo (audio, photo, tap) — each event carries `consent_state`, `sensitivity`, and `retention_class` metadata
+- **Memory**: `vestige-store/` — FSRS-6 forgetting curve, surprise gating, retroactive backfill, dreams. Store is project-isolated via `VESTIGE_DATA_DIR`
 - **Meds alert**: double-dose detection + reminder + sound (`lua/meds_alert.lua`)
+- **Privacy mode**: `controller.privacy_mode = True` suppresses med names on the device display (shows `[PRIVATE]` instead). Toggle at runtime.
+- **Data deletion**: `controller.clear_all_data()` wipes all in-memory capture records. For persistent Vestige store deletion, use the Vestige MCP `smart_delete` API.
 - **Korean pipeline**: correct UTF-8 handling (fixed the emulator's mojibake + Malgun font rendering)
+
+## What it does NOT do (honest boundaries)
+
+- **No NeuroSkill BCI integration** — Stage-2 planned, not implemented
+- **No hardware-dependent features** — everything runs against the emulator
+- **Translation bridge is not native** — the pplx shim returns empty content; ASR works, translation does not (documented in `artifacts/t6-v8/report.json`)
+- **No persistent privacy mode** — privacy mode is in-memory only; restarting the controller resets it
+- **No user-facing deletion UI** — `clear_all_data()` is a programmatic API, not a user prompt
 
 ## Architecture
 
@@ -34,7 +44,7 @@ Neurodivergent-first design (ADHD/ASD): meds double-dose alerts, steering-not-ov
 
 ## Status
 
-Pre-interview build (2026-08-13). Ship-ready demo: `artifacts/t6-v8/demo_full_loop.mp4`. Stage-2 planned: NeuroSkill BCI (EEG focus/emotion state) as the brain-state layer.
+Pre-interview build (2026-08-13). Ship-ready demo: `artifacts/t6-v8/demo_full_loop.mp4`. Stage-2 planned: NeuroSkill BCI (EEG focus/emotion state) as the brain-state layer — **not yet implemented**.
 
 ## License
 
